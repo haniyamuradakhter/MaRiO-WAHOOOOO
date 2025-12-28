@@ -18,6 +18,11 @@ list = []
 ORANGE = (255, 165, 0)
 BLACK = (0,0,0)
 BLUE = (0,0,255)
+time = 0
+# Making a font for the time display
+font = pygame.font.SysFont("Comic Sans", 30)
+# This is to make the variable frame for a loop that come later on and uses frames
+frame = 0
 # This is to make 5 platforms at random positions and insure they are within the screen and not outside
 for i in range(5):
 	platform_x = random.randint(0, WINDOW_WIDTH-platform_width)
@@ -28,6 +33,7 @@ for i in range(5):
 clock = pygame.time.Clock()
 game_running = True
 while game_running:
+	frame += 1
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			game_running = False	
@@ -51,7 +57,14 @@ while game_running:
 		pygame.draw.rect(window, BLUE, platform)
 		if player.colliderect(platform):
 			player_y = platform.top - player_height
-			break
+	#This is so that the time only changes after every 60 frames which is 1 second
+	if  frame == 60:
+		time += 1
+		frame = 0
+	# This is to spawn the text onto the screen
+	time_text = font.render(f"Time: {time}", True ,ORANGE)
+	#This puts the text onto a specific spot on the screen
+	window.blit(time_text,(10,10))
 	pygame.display.update() # This is so that when the player moves the screen updates to show the player moving every 60 frame
 	clock.tick(60)
 	
